@@ -12,15 +12,23 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'full_name',
+        'phone_number',
+        'blood',
+        'location',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * Get users by a specific blood group.
      *
-     * @var array
+     * @param     $query
+     * @param     $blood
+     * @param int $take
+     *
+     * @return mixed
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    public function scopeGetByBlood($query, $blood, $take = 5)
+    {
+        return $query->where('blood', $blood)->take($take)->get();
+    }
 }

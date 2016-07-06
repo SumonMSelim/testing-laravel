@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('full_name', 64);
             $table->string('phone_number', 16);
-            $table->enum('blood', ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']);
+            $table->enum('blood', ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'])->default('A+');
             $table->string('location', 64);
             $table->timestamps();
         });

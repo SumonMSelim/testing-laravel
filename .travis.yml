@@ -1,0 +1,49 @@
+# Required to run your project under the correct environment.
+language: php
+
+# Versions of PHP you want your project run with.
+php:
+  - 5.6
+  - 7.0
+  - hhvm
+
+env:
+  global:
+    - setup=basic
+
+matrix:
+  include:
+    - php: 5.6
+      env: setup=lowest
+    - php: 5.6
+      env: setup=stable
+    - php: 7.0
+      env: setup=lowest
+    - php: 7.0
+      env: setup=stable
+  allow_failures:
+    - php: hhvm
+  fast_finish: true
+
+sudo: false
+
+# Commands to be run before your environment runs.
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
+
+# Commands you want to run that will verify your build.
+script:
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+# Customize when the notification emails are sent.
+notifications:
+  on_success: never
+  on_failure: always
